@@ -1,0 +1,16 @@
+{% macro nav_drawer(current='') %}
+<button type="button" class="menu-btn" id="menu-btn" aria-label="Open menu">☰</button>
+
+<nav class="nav-drawer" id="nav-drawer" hidden>
+  <div class="nav-backdrop" id="nav-backdrop"></div>
+  <div class="nav-drawer-panel">
+    <button type="button" class="nav-close" id="nav-close" aria-label="Close menu">×</button>
+    <a href="{{ url_for('main.home') }}" class="nav-link{% if current == 'home' %} active{% endif %}">Home</a>
+    <a href="{{ url_for('main.outfit_maker') }}" class="nav-link{% if current == 'outfit-maker' %} active{% endif %}">Outfit Maker</a>
+    <a href="{{ url_for('main.clothes') }}" class="nav-link{% if current == 'clothes' %} active{% endif %}">All Clothes</a>
+    <a href="{{ url_for('main.saved_outfits') }}" class="nav-link{% if current == 'saved-outfits' %} active{% endif %}">Saved Outfits</a>
+    <a href="{{ url_for('main.settings_page') }}" class="nav-link{% if current == 'settings' %} active{% endif %}">Settings</a>
+    <a href="{{ url_for('main.statistics_page') }}" class="nav-link{% if current == 'statistics' %} active{% endif %}">Statistics</a>
+  </div>
+</nav>
+{% endmacro %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=480, height=800, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Wardrobe Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="page-body home-body">
+  {% from '_nav.html' import nav_drawer %}
+  {{ nav_drawer('home') }}
+
+  <a href="{{ url_for('main.outfit_maker') }}" class="home-screen" aria-label="Open outfit maker">
+    <div class="home-content">
+      <div class="clock">
+        <div class="clock-time" id="clock-time">--:--</div>
+        <div class="clock-date" id="clock-date"></div>
+      </div>
+      <div class="weather" id="weather">
+        <span class="weather-loading">Loading weather…</span>
+      </div>
+    </div>
+    <div class="home-hint">Tap to choose an outfit</div>
+  </a>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>

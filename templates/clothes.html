@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=480, height=800, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>All Clothes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/clothes.css') }}">
+</head>
+<body class="page-body clothes-body">
+  {% from '_nav.html' import nav_drawer %}
+  {{ nav_drawer('clothes') }}
+
+  <header class="screen-header">
+    <h1>All Clothes</h1>
+    <div class="header-actions">
+      <button type="button" class="laundry-btn" id="laundry-btn">Laundry Day</button>
+    </div>
+  </header>
+
+  <nav class="category-tabs" id="category-tabs"></nav>
+
+  <div class="clothes-grid-wrap">
+    <div class="clothes-grid" id="clothes-grid"></div>
+    <p class="clothes-empty" id="clothes-empty" hidden>No items in this category</p>
+  </div>
+
+  <button type="button" class="fab" id="fab-add" aria-label="Add item">+</button>
+
+  <div class="clothes-overlay" id="detail-overlay" hidden>
+    <header class="overlay-header">
+      <button type="button" class="overlay-back" id="detail-close" aria-label="Back">←</button>
+      <h2 id="detail-title">Item</h2>
+      <span class="overlay-spacer"></span>
+    </header>
+    <div class="detail-body">
+      <div class="detail-image-wrap" id="detail-image-wrap">
+        <img id="detail-image" alt="">
+        <span class="detail-no-image" id="detail-no-image">No image</span>
+      </div>
+      <p class="detail-category" id="detail-category"></p>
+      <label class="field-label" for="detail-name">Name</label>
+      <input type="text" id="detail-name" class="field-input" autocomplete="off">
+      <label class="field-label" for="detail-subcategory">Subcategory</label>
+      <input type="text" id="detail-subcategory" class="field-input" autocomplete="off">
+      <label class="field-label" for="detail-color">Color</label>
+      <input type="text" id="detail-color" class="field-input" autocomplete="off">
+      <label class="field-label" for="detail-tags">Tags</label>
+      <input type="text" id="detail-tags" class="field-input" placeholder="comma separated" autocomplete="off">
+      <label class="dirty-toggle">
+        <input type="checkbox" id="detail-dirty">
+        <span>Mark as dirty</span>
+      </label>
+      <button type="button" class="action-btn action-btn-primary detail-save" id="detail-save">Save</button>
+    </div>
+  </div>
+
+  <div class="clothes-overlay" id="add-overlay" hidden>
+    <header class="overlay-header">
+      <button type="button" class="overlay-back" id="add-close" aria-label="Back">←</button>
+      <h2>Add Item</h2>
+      <span class="overlay-spacer"></span>
+    </header>
+    <div class="detail-body">
+      <label class="field-label" for="add-image-url">Image URL</label>
+      <input type="text" id="add-image-url" class="field-input" autocomplete="off">
+      <label class="field-label" for="add-category">Category</label>
+      <select id="add-category" class="field-input"></select>
+      <label class="field-label" for="add-name">Name</label>
+      <input type="text" id="add-name" class="field-input" autocomplete="off">
+      <label class="field-label" for="add-subcategory">Subcategory</label>
+      <input type="text" id="add-subcategory" class="field-input" autocomplete="off">
+      <label class="field-label" for="add-color">Color</label>
+      <input type="text" id="add-color" class="field-input" autocomplete="off">
+      <label class="field-label" for="add-tags">Tags</label>
+      <input type="text" id="add-tags" class="field-input" placeholder="comma separated" autocomplete="off">
+      <button type="button" class="action-btn action-btn-primary detail-save" id="add-submit">Add Item</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/clothes.js') }}"></script>
+</body>
+</html>

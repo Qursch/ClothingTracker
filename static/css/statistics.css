@@ -1,0 +1,124 @@
+/* ── Statistics screen ── */
+
+.statistics-body {
+  display: flex;
+  flex-direction: column;
+  height: 800px;
+  max-height: 100vh;
+}
+
+.stats-list-wrap {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stats-list {
+  list-style: none;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--text-dim);
+}
+
+.stats-thumb {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 0.35rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.stats-thumb .thumb-fallback {
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 2px;
+}
+
+.stats-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stats-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+.stats-wears {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.stats-wears-count {
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.stats-wears-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.status-badge {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-clean {
+  background: rgba(107, 140, 174, 0.2);
+  color: var(--accent);
+}
+
+.status-dirty {
+  background: rgba(196, 92, 92, 0.2);
+  color: #e8a0a0;
+}
+
+.stats-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 3rem 1rem;
+}
+
+.stats-empty[hidden] {
+  display: none;
+}

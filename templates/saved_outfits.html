@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=480, height=800, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Saved Outfits</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/saved-outfits.css') }}">
+</head>
+<body class="page-body saved-outfits-body">
+  {% from '_nav.html' import nav_drawer %}
+  {{ nav_drawer('saved-outfits') }}
+
+  <header class="screen-header">
+    <h1>Saved Outfits</h1>
+  </header>
+
+  <div class="saved-grid-wrap">
+    <div class="saved-grid" id="saved-grid"></div>
+    <p class="saved-empty" id="saved-empty" hidden>No saved outfits yet</p>
+  </div>
+
+  <div class="modal-overlay" id="delete-modal" hidden>
+    <div class="modal-card">
+      <h3>Delete outfit?</h3>
+      <p id="delete-message"></p>
+      <div class="modal-actions">
+        <button type="button" class="action-btn" id="delete-cancel">Cancel</button>
+        <button type="button" class="action-btn action-btn-danger" id="delete-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/saved-outfits.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=480, height=800, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Outfit Maker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/outfit-maker.css') }}">
+</head>
+<body class="page-body outfit-maker-body">
+  {% from '_nav.html' import nav_drawer %}
+  {{ nav_drawer('outfit-maker') }}
+
+  <div class="outfit-name-bar" id="outfit-name-bar">
+    <span class="outfit-name-chevron" aria-hidden="true">‹</span>
+    <span class="outfit-name-display" id="outfit-name-display">Custom</span>
+    <span class="outfit-name-chevron" aria-hidden="true">›</span>
+  </div>
+
+  <label class="dirty-filter" for="include-dirty">
+    <input type="checkbox" id="include-dirty">
+    <span>Include Dirty Clothes</span>
+  </label>
+
+  <div class="maker-layout">
+    <aside class="side-slots side-left">
+      <div class="slot slot-side" data-slot="jacket">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Jacket</span></div>
+        <span class="slot-label">Jacket</span>
+      </div>
+      <div class="slot slot-side" data-slot="watch">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Watch</span></div>
+        <span class="slot-label">Watch</span>
+      </div>
+      <div class="slot slot-side" data-slot="chain">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Chain</span></div>
+        <span class="slot-label">Chain</span>
+      </div>
+    </aside>
+
+    <main class="main-slots">
+      <div class="slot slot-main" data-slot="shirt">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Shirt</span></div>
+        <span class="slot-label">Shirt</span>
+      </div>
+      <div class="slot slot-main" data-slot="pants">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Pants</span></div>
+        <span class="slot-label">Pants</span>
+      </div>
+      <div class="slot slot-main" data-slot="shoes">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Shoes</span></div>
+        <span class="slot-label">Shoes</span>
+      </div>
+    </main>
+
+    <aside class="side-slots side-right">
+      <div class="slot slot-side" data-slot="belt">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Belt</span></div>
+        <span class="slot-label">Belt</span>
+      </div>
+      <div class="slot slot-side" data-slot="bracelet">
+        <div class="slot-image-wrap"><img alt=""><span class="slot-empty">Bracelet</span></div>
+        <span class="slot-label">Bracelet</span>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="maker-actions">
+    <button type="button" class="action-btn" id="save-btn">Save Outfit</button>
+    <button type="button" class="action-btn action-btn-primary" id="wear-btn">Worn Today</button>
+  </footer>
+
+  <div class="picker-overlay" id="picker-overlay" hidden>
+    <header class="picker-header">
+      <h2 id="picker-title">Select</h2>
+      <button type="button" class="picker-close" id="picker-close" aria-label="Close">×</button>
+    </header>
+    <div class="picker-scroll" id="picker-scroll"></div>
+  </div>
+
+  <div class="modal-overlay" id="name-modal" hidden>
+    <div class="modal-card">
+      <h3>Save Outfit</h3>
+      <input type="text" id="outfit-name-input" class="field-input" placeholder="Outfit name" autocomplete="off">
+      <div class="modal-actions">
+        <button type="button" class="action-btn" id="name-cancel">Cancel</button>
+        <button type="button" class="action-btn action-btn-primary" id="name-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/outfit-maker.js') }}"></script>
+</body>
+</html>

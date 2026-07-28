@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=480, height=800, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Statistics</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/statistics.css') }}">
+</head>
+<body class="page-body statistics-body">
+  {% from '_nav.html' import nav_drawer %}
+  {{ nav_drawer('statistics') }}
+
+  <header class="screen-header">
+    <h1>Statistics</h1>
+  </header>
+
+  <div class="stats-list-wrap">
+    <ul class="stats-list" id="stats-list"></ul>
+    <p class="stats-empty" id="stats-empty" hidden>No items yet</p>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
+</body>
+</html>
