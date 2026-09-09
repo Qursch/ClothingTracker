@@ -48,7 +48,8 @@ fi
 echo "Installing Python dependencies..."
 sudo -u "$APP_USER" "$APP_DIR/.venv/bin/pip" install -r "$APP_DIR/requirements.txt"
 
-chmod +x "$APP_DIR/start-kiosk.sh" "$APP_DIR/install-autostart.sh"
+chmod +x "$APP_DIR/start-kiosk.sh" "$APP_DIR/install-autostart.sh" \
+  "$APP_DIR/start-server.sh" "$APP_DIR/update-app.sh"
 
 UNIT=/etc/systemd/system/wardrobe.service
 sed \
@@ -60,6 +61,14 @@ sed \
 systemctl daemon-reload
 systemctl enable wardrobe.service
 systemctl restart wardrobe.service
+
+SUDOERS=/etc/sudoers.d/wardrobe
+printf '%s ALL=(root) NOPASSWD: /usr/bin/systemctl restart wardrobe.service\n' \
+  "$APP_USER" > "$SUDOERS"
+chmod 440 "$SUDOERS"
+if command -v visudo >/dev/null 2>&1; then
+  visudo -cf "$SUDOERS" >/dev/null || rm -f "$SUDOERS"
+fi
 
 append_once() {
   file="$1"

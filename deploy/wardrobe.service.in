@@ -1,6 +1,6 @@
 [Unit]
 Description=Wardrobe Tracker
-After=network.target
+After=network-online.target
 Wants=network-online.target
 
 [Service]
@@ -8,10 +8,11 @@ Type=simple
 User=@APP_USER@
 Group=@APP_GROUP@
 WorkingDirectory=@APP_DIR@
-ExecStart=@APP_DIR@/.venv/bin/python run.py
+ExecStart=@APP_DIR@/start-server.sh
 Restart=always
 RestartSec=2
 Environment=PYTHONUNBUFFERED=1
+TimeoutStartSec=90
 
 [Install]
 WantedBy=multi-user.target

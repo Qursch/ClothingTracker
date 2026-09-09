@@ -13,7 +13,7 @@ if [ "$(uname -s)" != "Linux" ]; then
   exit 1
 fi
 
-if command -v flock >/dev/null 2>&1; then
+if [ "${WARDROBE_POST_UPDATE:-}" != 1 ] && command -v flock >/dev/null 2>&1; then
   exec 9>"$LOCK_FILE"
   if ! flock -n 9; then
     echo "Kiosk is already starting."
@@ -51,13 +51,23 @@ except OSError:
 PY
 }
 
+if [ "${WARDROBE_POST_UPDATE:-}" != 1 ]; then
+  "$APP_DIR/update-app.sh"
+  update_status=$?
+  if [ "$update_status" -eq 10 ]; then
+    echo "Code updated; restarting wardrobe.service..."
+    sudo -n systemctl restart wardrobe.service 2>/dev/null || true
+  fi
+  WARDROBE_POST_UPDATE=1 exec "$APP_DIR/start-kiosk.sh"
+fi
+
 if ! server_up; then
   if systemctl is-active --quiet wardrobe.service 2>/dev/null \
     || systemctl is-enabled --quiet wardrobe.service 2>/dev/null; then
     echo "Waiting for wardrobe.service..."
   else
     echo "Starting wardrobe server..."
-    "$python_bin" "$APP_DIR/run.py" >/tmp/wardrobe-server.log 2>&1 &
+    "$APP_DIR/start-server.sh" >/tmp/wardrobe-server.log 2>&1 &
   fi
 fi
 
