@@ -63,6 +63,71 @@ window.Wardrobe = {
     this.resetIdleTimer();
   },
 
+  isFullscreen: function () {
+    return !!(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement
+    );
+  },
+
+  enterFullscreen: function () {
+    if (this.isFullscreen()) return;
+    var el = document.documentElement;
+    var request =
+      el.requestFullscreen ||
+      el.webkitRequestFullscreen ||
+      el.mozRequestFullScreen ||
+      el.msRequestFullscreen;
+    if (!request) return;
+
+    function tryRequest(withOptions) {
+      try {
+        var result = withOptions
+          ? request.call(el, { navigationUI: "hide" })
+          : request.call(el);
+        if (result && typeof result.catch === "function") {
+          result.catch(function () {
+            if (withOptions) tryRequest(false);
+          });
+        }
+      } catch (err) {
+        if (withOptions) tryRequest(false);
+      }
+    }
+
+    tryRequest(true);
+  },
+
+  initFullscreen: function () {
+    var self = this;
+    this.enterFullscreen();
+
+    var events = ["pointerdown", "touchstart", "click", "keydown"];
+    function onGesture(event) {
+      if (event && (event.key === "Escape" || event.key === "F11")) {
+        event.preventDefault();
+        setTimeout(function () {
+          self.enterFullscreen();
+        }, 0);
+        return;
+      }
+      self.enterFullscreen();
+    }
+    events.forEach(function (name) {
+      document.addEventListener(name, onGesture, { capture: true });
+    });
+
+    ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange"].forEach(
+      function (name) {
+        document.addEventListener(name, function () {
+          if (!self.isFullscreen()) self.enterFullscreen();
+        });
+      }
+    );
+  },
+
   initNav: function () {
     var drawer = document.getElementById("nav-drawer");
     var btn = document.getElementById("menu-btn");
@@ -82,6 +147,7 @@ window.Wardrobe = {
     if (closeBtn) closeBtn.addEventListener("click", closeNav);
     if (backdrop) backdrop.addEventListener("click", closeNav);
 
+    this.initFullscreen();
     this.initIdleTimeout();
   },
 
