@@ -1,8 +1,12 @@
 #!/bin/sh
 # One-time Raspberry Pi setup: start the app at boot, then open Firefox kiosk.
-# Run this on the Pi from the repo directory:
+# Run this on the Pi from the repo directory (needs a keyboard or SSH once):
 #   ./install-autostart.sh
 # Then reboot.
+#
+# After this, git pulls run deploy/apply-machine.sh as root automatically.
+# Future machine-config changes (display sleep, systemd units, sudoers) land
+# via git and do not need another keyboard.
 
 set -eu
 
@@ -49,26 +53,11 @@ echo "Installing Python dependencies..."
 sudo -u "$APP_USER" "$APP_DIR/.venv/bin/pip" install -r "$APP_DIR/requirements.txt"
 
 chmod +x "$APP_DIR/start-kiosk.sh" "$APP_DIR/install-autostart.sh" \
-  "$APP_DIR/start-server.sh" "$APP_DIR/update-app.sh"
+  "$APP_DIR/start-server.sh" "$APP_DIR/update-app.sh" \
+  "$APP_DIR/deploy/apply-machine.sh" "$APP_DIR/deploy/display-sleep.sh"
 
-UNIT=/etc/systemd/system/wardrobe.service
-sed \
-  -e "s|@APP_USER@|$APP_USER|g" \
-  -e "s|@APP_GROUP@|$APP_GROUP|g" \
-  -e "s|@APP_DIR@|$APP_DIR|g" \
-  "$APP_DIR/deploy/wardrobe.service.in" > "$UNIT"
-
-systemctl daemon-reload
-systemctl enable wardrobe.service
+"$APP_DIR/deploy/apply-machine.sh" --defer-display
 systemctl restart wardrobe.service
-
-SUDOERS=/etc/sudoers.d/wardrobe
-printf '%s ALL=(root) NOPASSWD: /usr/bin/systemctl restart wardrobe.service\n' \
-  "$APP_USER" > "$SUDOERS"
-chmod 440 "$SUDOERS"
-if command -v visudo >/dev/null 2>&1; then
-  visudo -cf "$SUDOERS" >/dev/null || rm -f "$SUDOERS"
-fi
 
 append_once() {
   file="$1"
@@ -138,5 +127,7 @@ fi
 
 echo
 echo "Setup complete."
+echo "Later git pulls will run deploy/apply-machine.sh without a keyboard."
+echo "The DSI panel blanks 11pm–8am (Pi local time) and wakes afterward."
 echo "Reboot the Pi. After login it will start the app, then Firefox fullscreen."
 echo "  sudo reboot"

@@ -1,0 +1,10 @@
+[Unit]
+Description=Apply wardrobe display sleep schedule
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=@APP_DIR@/deploy/display-sleep.sh auto
+
+[Install]
+WantedBy=multi-user.target

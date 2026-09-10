@@ -1,0 +1,12 @@
+[Unit]
+Description=Hourly wardrobe display sleep schedule
+
+[Timer]
+OnBootSec=30
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1min
+Unit=wardrobe-display.service
+
+[Install]
+WantedBy=timers.target

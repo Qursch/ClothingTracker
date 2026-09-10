@@ -11,5 +11,8 @@ if [ ! -x "$python_bin" ]; then
 fi
 
 "$APP_DIR/update-app.sh" || true
+if [ -x "$APP_DIR/deploy/apply-machine.sh" ]; then
+  sudo -n "$APP_DIR/deploy/apply-machine.sh" >/tmp/wardrobe-apply-machine.log 2>&1 || true
+fi
 
 exec "$python_bin" "$APP_DIR/run.py"

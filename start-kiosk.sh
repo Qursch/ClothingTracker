@@ -54,6 +54,10 @@ PY
 if [ "${WARDROBE_POST_UPDATE:-}" != 1 ]; then
   "$APP_DIR/update-app.sh"
   update_status=$?
+  if [ -x "$APP_DIR/deploy/apply-machine.sh" ]; then
+    echo "Applying machine config..."
+    sudo -n "$APP_DIR/deploy/apply-machine.sh" 2>/dev/null || true
+  fi
   if [ "$update_status" -eq 10 ]; then
     echo "Code updated; restarting wardrobe.service..."
     sudo -n systemctl restart wardrobe.service 2>/dev/null || true
