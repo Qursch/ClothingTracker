@@ -246,6 +246,9 @@
   document.getElementById("add-submit").addEventListener("click", submitAdd);
 
   Wardrobe.initNav();
+  Wardrobe.initScrollButtons(document.querySelector(".clothes-grid-wrap"), {
+    extraClass: "scroll-stepper-with-fab",
+  });
   buildTabs();
   buildAddCategorySelect();
   loadGrid();

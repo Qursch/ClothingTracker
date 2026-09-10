@@ -60,6 +60,11 @@
   overflow-y: auto;
   padding: 0.5rem 0.75rem 5rem;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.clothes-grid-wrap::-webkit-scrollbar {
+  display: none;
 }
 
 .clothes-grid {

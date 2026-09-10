@@ -129,5 +129,6 @@
   document.getElementById("delete-confirm").addEventListener("click", confirmDelete);
 
   Wardrobe.initNav();
+  Wardrobe.initScrollButtons(document.querySelector(".saved-grid-wrap"));
   loadOutfits();
 })();

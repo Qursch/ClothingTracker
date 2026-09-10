@@ -1,14 +1,17 @@
 #!/bin/sh
-# Set DSI/touchscreen backlight from the local clock.
-#   auto  - off 11pm-8am, on otherwise (Pi local time)
+# Set DSI/touchscreen backlight from the Pi's local clock.
+#   auto  - follow the schedule below
 #   on    - full brightness
 #   off   - backlight off
 # Safe to run repeatedly. No-ops if no backlight device exists.
+#
+# Default awake: 8:00am-11:00pm.
+# Extra off windows (local time):
+#   Tue/Thu  11:30am-3:00pm
+#   Wed      7:30pm through Thu 8:00am
+#   Fri      9:00am-noon
 
 set -eu
-
-NIGHT_START_HOUR=23
-NIGHT_END_HOUR=8
 
 set_backlight() {
   mode="$1"
@@ -37,12 +40,37 @@ set_backlight() {
   done
 }
 
-is_night() {
-  # GNU date on Raspberry Pi OS; %-H is 0–23 with no leading zero.
-  hour=$(date +%-H 2>/dev/null || date +%H)
-  hour=$(echo "$hour" | sed 's/^0*\([0-9][0-9]*\)$/\1/')
-  [ -n "$hour" ] || hour=0
-  [ "$hour" -ge "$NIGHT_START_HOUR" ] || [ "$hour" -lt "$NIGHT_END_HOUR" ]
+should_sleep() {
+  python3 - <<'PY'
+from datetime import datetime
+
+now = datetime.now()
+weekday = now.weekday()  # Mon=0 .. Sun=6
+mins = now.hour * 60 + now.minute
+
+def between(start_h, start_m, end_h, end_m):
+    return (start_h * 60 + start_m) <= mins < (end_h * 60 + end_m)
+
+sleep = False
+
+# Every night 11:00pm-8:00am
+if mins >= 23 * 60 or mins < 8 * 60:
+    sleep = True
+
+# Tuesday and Thursday 11:30am-3:00pm
+if weekday in (1, 3) and between(11, 30, 15, 0):
+    sleep = True
+
+# Wednesday 7:30pm until Thursday 8:00am (overnight window covers Thu morning)
+if weekday == 2 and mins >= 19 * 60 + 30:
+    sleep = True
+
+# Friday 9:00am-noon
+if weekday == 4 and between(9, 0, 12, 0):
+    sleep = True
+
+raise SystemExit(0 if sleep else 1)
+PY
 }
 
 cmd="${1:-auto}"
@@ -54,7 +82,7 @@ case "$cmd" in
     set_backlight off
     ;;
   auto)
-    if is_night; then
+    if should_sleep; then
       set_backlight off
     else
       set_backlight on

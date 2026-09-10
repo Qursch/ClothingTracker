@@ -151,6 +151,33 @@ window.Wardrobe = {
     this.initIdleTimeout();
   },
 
+  initScrollButtons: function (scrollEl, options) {
+    if (!scrollEl) return;
+    options = options || {};
+    var parent =
+      options.parent || document.querySelector(".page-body") || document.body;
+    var step = options.step || 200;
+    var box = document.createElement("div");
+    box.className =
+      "scroll-stepper" + (options.extraClass ? " " + options.extraClass : "");
+    box.innerHTML =
+      '<button type="button" class="scroll-stepper-btn" data-dir="-1" aria-label="Scroll up">▲</button>' +
+      '<button type="button" class="scroll-stepper-btn" data-dir="1" aria-label="Scroll down">▼</button>';
+    parent.appendChild(box);
+
+    function scrollByDir(dir) {
+      scrollEl.scrollBy({ top: dir * step, behavior: "smooth" });
+    }
+
+    box.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-dir]");
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      scrollByDir(Number(btn.getAttribute("data-dir")));
+    });
+  },
+
   api: async function (url, options) {
     try {
       var res = await fetch(url, options || {});

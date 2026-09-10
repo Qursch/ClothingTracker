@@ -1,9 +1,9 @@
 [Unit]
-Description=Hourly wardrobe display sleep schedule
+Description=Wardrobe display sleep schedule
 
 [Timer]
 OnBootSec=30
-OnCalendar=hourly
+OnCalendar=*:0/30
 Persistent=true
 AccuracySec=1min
 Unit=wardrobe-display.service

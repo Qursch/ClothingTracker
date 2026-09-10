@@ -743,5 +743,6 @@
   document.getElementById("wear-btn").addEventListener("click", wearToday);
 
   Wardrobe.initNav();
+  Wardrobe.initScrollButtons(pickerScroll, { parent: pickerOverlay });
   init();
 })();

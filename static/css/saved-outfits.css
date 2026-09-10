@@ -10,8 +10,13 @@
 .saved-grid-wrap {
   flex: 1;
   overflow-y: auto;
-  padding: 0.75rem;
+  padding: 0.75rem 0.75rem 5.5rem;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.saved-grid-wrap::-webkit-scrollbar {
+  display: none;
 }
 
 .saved-grid {
