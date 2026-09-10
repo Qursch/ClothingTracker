@@ -1,7 +1,7 @@
 (function () {
   const SLOTS = [
-    "shirt",
-    "pants",
+    "tops",
+    "bottoms",
     "shoes",
     "jacket",
     "watch",
@@ -11,26 +11,14 @@
   ];
 
   const SLOT_LABELS = {
-    shirt: "Shirts",
-    pants: "Pants",
+    tops: "Tops",
+    bottoms: "Bottoms",
     shoes: "Shoes",
     jacket: "Jackets",
     watch: "Watches",
     bracelet: "Bracelets",
     chain: "Chains",
     belt: "Belts",
-  };
-
-  // Item JSON uses extra categories (tops, shorts) that share these slots.
-  const SLOT_CATEGORIES = {
-    shirt: ["shirt", "tops"],
-    pants: ["pants", "shorts"],
-    shoes: ["shoes"],
-    jacket: ["jacket"],
-    watch: ["watch"],
-    bracelet: ["bracelet"],
-    chain: ["chain"],
-    belt: ["belt"],
   };
 
   const NEVER_DIRTY = {
@@ -104,20 +92,8 @@
     return !!item.is_dirty;
   }
 
-  function itemsForSlot(slot) {
-    const cats = SLOT_CATEGORIES[slot] || [slot];
-    const items = [];
-    cats.forEach(function (cat) {
-      const list = itemsByCategory[cat] || [];
-      list.forEach(function (item) {
-        items.push(item);
-      });
-    });
-    return items;
-  }
-
   function getSwipeableItems(slot) {
-    const items = itemsForSlot(slot);
+    const items = itemsByCategory[slot] || [];
     if (includeDirtyClothes()) return items.slice();
     return items.filter(function (item) {
       return !isItemDirty(item);
@@ -179,17 +155,13 @@
   }
 
   function findItem(category, itemId) {
-    const cats = SLOT_CATEGORIES[category] || [category];
+    const cats = [];
+    if (category) cats.push(category);
+    Object.keys(itemsByCategory).forEach(function (cat) {
+      if (cats.indexOf(cat) < 0) cats.push(cat);
+    });
     for (let i = 0; i < cats.length; i++) {
       const items = itemsByCategory[cats[i]] || [];
-      const found = items.find(function (item) {
-        return item.id === itemId;
-      });
-      if (found) return found;
-    }
-    const allCats = Object.keys(itemsByCategory);
-    for (let i = 0; i < allCats.length; i++) {
-      const items = itemsByCategory[allCats[i]] || [];
       const found = items.find(function (item) {
         return item.id === itemId;
       });
@@ -499,9 +471,12 @@
     });
 
     (outfit.items || []).forEach(function (item) {
-      if (!item.slot || SLOTS.indexOf(item.slot) < 0) return;
-      const live = findItem(item.category || item.slot, item.id);
-      selection[item.slot] = live || item;
+      let slot = item.slot;
+      if (slot === "shirt") slot = "tops";
+      if (slot === "pants" || slot === "shorts") slot = "bottoms";
+      if (!slot || SLOTS.indexOf(slot) < 0) return;
+      const live = findItem(item.category || slot, item.id);
+      selection[slot] = live || item;
     });
 
     savedOutfitId = outfit.id;
@@ -592,7 +567,7 @@
     });
 
     if (!skipDefaults) {
-      const defaultSlots = { shirt: true, pants: true, shoes: true };
+      const defaultSlots = { tops: true, bottoms: true, shoes: true };
       SLOTS.forEach(function (slot) {
         if (!defaultSlots[slot]) return;
         const list = getSwipeableItems(slot);

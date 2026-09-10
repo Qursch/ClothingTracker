@@ -1,5 +1,5 @@
 (function () {
-  const MAIN_LAYERS = ["shirt", "pants", "shoes"];
+  const MAIN_LAYERS = ["tops", "bottoms", "shoes"];
 
   let pendingDeleteId = null;
 
@@ -10,7 +10,10 @@
 
   function itemBySlot(outfit, slot) {
     return (outfit.items || []).find(function (item) {
-      return item.slot === slot;
+      let itemSlot = item.slot;
+      if (itemSlot === "shirt") itemSlot = "tops";
+      if (itemSlot === "pants" || itemSlot === "shorts") itemSlot = "bottoms";
+      return itemSlot === slot;
     });
   }
 

@@ -73,14 +73,14 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
-.thumb-shirt {
+.thumb-tops {
   top: 0;
   height: 42%;
   z-index: 3;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-.thumb-pants {
+.thumb-bottoms {
   top: 30%;
   height: 48%;
   z-index: 2;

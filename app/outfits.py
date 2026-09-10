@@ -10,8 +10,8 @@ bp = Blueprint("outfits", __name__, url_prefix="/api/outfits")
 
 VALID_SLOTS = frozenset(
     {
-        "shirt",
-        "pants",
+        "tops",
+        "bottoms",
         "shoes",
         "jacket",
         "watch",

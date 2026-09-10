@@ -1,9 +1,7 @@
 (function () {
   const CATEGORIES = [
-    "shirt",
     "tops",
-    "pants",
-    "shorts",
+    "bottoms",
     "shoes",
     "jacket",
     "watch",

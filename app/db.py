@@ -54,6 +54,27 @@ INSERT OR IGNORE INTO settings (id, latitude, longitude) VALUES (1, NULL, NULL);
 """
 
 
+def _rename_outfit_slot(conn: sqlite3.Connection, old: str, new: str) -> None:
+    rows = conn.execute(
+        "SELECT outfit_id FROM outfit_items WHERE slot = ?", (old,)
+    ).fetchall()
+    for row in rows:
+        exists = conn.execute(
+            "SELECT 1 FROM outfit_items WHERE outfit_id = ? AND slot = ?",
+            (row[0], new),
+        ).fetchone()
+        if exists:
+            conn.execute(
+                "DELETE FROM outfit_items WHERE outfit_id = ? AND slot = ?",
+                (row[0], old),
+            )
+        else:
+            conn.execute(
+                "UPDATE outfit_items SET slot = ? WHERE outfit_id = ? AND slot = ?",
+                (new, row[0], old),
+            )
+
+
 def migrate_db(conn: sqlite3.Connection) -> None:
     """Add new columns to existing databases without losing data."""
     columns = {row[1] for row in conn.execute("PRAGMA table_info(items)")}
@@ -61,6 +82,14 @@ def migrate_db(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE items ADD COLUMN name TEXT")
     if "subcategory" not in columns:
         conn.execute("ALTER TABLE items ADD COLUMN subcategory TEXT")
+
+    conn.execute("UPDATE items SET category = 'tops' WHERE category = 'shirt'")
+    conn.execute(
+        "UPDATE items SET category = 'bottoms' WHERE category IN ('pants', 'shorts')"
+    )
+    _rename_outfit_slot(conn, "shirt", "tops")
+    _rename_outfit_slot(conn, "pants", "bottoms")
+    _rename_outfit_slot(conn, "shorts", "bottoms")
 
 
 def init_db(db_path: str | Path) -> None:
