@@ -21,6 +21,18 @@
     belt: "Belts",
   };
 
+  // Item JSON uses extra categories (tops, shorts) that share these slots.
+  const SLOT_CATEGORIES = {
+    shirt: ["shirt", "tops"],
+    pants: ["pants", "shorts"],
+    shoes: ["shoes"],
+    jacket: ["jacket"],
+    watch: ["watch"],
+    bracelet: ["bracelet"],
+    chain: ["chain"],
+    belt: ["belt"],
+  };
+
   const NEVER_DIRTY = {
     chain: true,
     bracelet: true,
@@ -92,8 +104,20 @@
     return !!item.is_dirty;
   }
 
+  function itemsForSlot(slot) {
+    const cats = SLOT_CATEGORIES[slot] || [slot];
+    const items = [];
+    cats.forEach(function (cat) {
+      const list = itemsByCategory[cat] || [];
+      list.forEach(function (item) {
+        items.push(item);
+      });
+    });
+    return items;
+  }
+
   function getSwipeableItems(slot) {
-    const items = itemsByCategory[slot] || [];
+    const items = itemsForSlot(slot);
     if (includeDirtyClothes()) return items.slice();
     return items.filter(function (item) {
       return !isItemDirty(item);
@@ -155,10 +179,23 @@
   }
 
   function findItem(category, itemId) {
-    const items = itemsByCategory[category] || [];
-    return items.find(function (item) {
-      return item.id === itemId;
-    });
+    const cats = SLOT_CATEGORIES[category] || [category];
+    for (let i = 0; i < cats.length; i++) {
+      const items = itemsByCategory[cats[i]] || [];
+      const found = items.find(function (item) {
+        return item.id === itemId;
+      });
+      if (found) return found;
+    }
+    const allCats = Object.keys(itemsByCategory);
+    for (let i = 0; i < allCats.length; i++) {
+      const items = itemsByCategory[allCats[i]] || [];
+      const found = items.find(function (item) {
+        return item.id === itemId;
+      });
+      if (found) return found;
+    }
+    return undefined;
   }
 
   function itemDisplayName(item) {
