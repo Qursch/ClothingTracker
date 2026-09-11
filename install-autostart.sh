@@ -128,6 +128,6 @@ fi
 echo
 echo "Setup complete."
 echo "Later git pulls will run deploy/apply-machine.sh without a keyboard."
-echo "The DSI panel follows deploy/display-sleep.sh (default 8am-11pm, plus class-day windows)."
+echo "The DSI panel follows deploy/display-sleep.sh (default 8am-10pm, plus class-day windows)."
 echo "Reboot the Pi. After login it will start the app, then Firefox fullscreen."
 echo "  sudo reboot"
